@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Museo</title>
+    <link rel="stylesheet" href="fontawesome/css/all.min.css"> <!-- https://fontawesome.com/ -->
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap" rel="stylesheet"> <!-- https://fonts.google.com/ -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/templatemo-xtra-blog.css" rel="stylesheet">
+    <!--
+    TemplateMo 553 Xtra Blog
+    https://templatemo.com/tm-553-xtra-blog
+    -->
+    <style>
+        /* CSS personalizado para ajustar el tamaño del modal */
+        .modal-dialog {
+            max-width: 80%; /* Ajusta el ancho del modal al 80% del ancho de la ventana */
+        }
+        .modal-body img {
+            max-width: 100%; /* Asegura que la imagen no sea más ancha que el modal */
+            height: auto; /* Mantiene la proporción de la imagen */
+            border-radius: 15px; /* Borde redondeado */
+        }
+    </style>
+</head>
+<body>
+    <header class="tm-header" id="tm-header">
+        <div class="tm-header-wrapper">
+            <button class="navbar-toggler" type="button" aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="tm-site-header">
+                <div style="text-align: center;">
+                    <img src="img/museo.png" alt="" style="width: 10rem; height: 10rem;">  
+                </div>
+                <h1 class="text-center">Museo</h1>
+            </div>
+            <nav class="tm-nav" id="tm-nav">            
+                <ul>
+                    <li class="tm-nav-item active"><a href="index.html" class="tm-nav-link">
+                        <i class="fas fa-home"></i>
+                        Objetos
+                    </a></li>
+                    <li class="tm-nav-item"><a href="map.html" class="tm-nav-link">
+                        <i class="fas fa-pen"></i>
+                        Donde nos encontramos
+                    </a></li>
+                    <li class="tm-nav-item"><a href="MotoMendez.html" class="tm-nav-link">
+                        <i class="fas fa-users"></i>
+                        Quien es Moto Mendez
+                    </a></li>
+                    <li class="tm-nav-item"><a href="chatbot.html" class="tm-nav-link">
+                        <i class="far fa-comments"></i>
+                        Chat boot
+                    </a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <div class="container-fluid">
+        <main class="tm-main">
+            <!-- Search form -->
+            <div class="row tm-row">
+                <div class="col-12">
+                </div>                
+            </div>            
+            <div class="row tm-row" id="contenedor-objetos">
+                <!-- Los artículos generados dinámicamente aparecerán aquí -->
+            </div>
+
+            <footer class="row tm-row">
+                <hr class="col-12">
+                <div class="tm-color-gray tm-copyright">
+                    Copyright Luis Fernando Garcia Barja
+                </div>
+            </footer>
+        </main>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel">Detalles del Objeto</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    
+                    <p id="modal-descripcion">Descripción del objeto:Diosssssssssssss </p>
+                    <img id="modal-imagen" src="" alt="Imagen del objeto"> <!-- Imagen del objeto -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/templatemo-script.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // Función para obtener los datos de la API
+        async function obtenerDatos() {
+            try {
+                const respuesta = await fetch('https://chatbot.dev.dtt.tja.ucb.edu.bo/getall');
+                
+                if (!respuesta.ok) {
+                    throw new Error('Error en la solicitud: ' + respuesta.status);
+                }
+
+                const datos = await respuesta.json();
+                mostrarDatos(datos);
+            } catch (error) {
+                console.error('Hubo un problema con la solicitud:', error);
+            }
+        }
+
+        // Función para mostrar los datos en la página
+        function mostrarDatos(datos) {
+            const contenedor = document.getElementById('contenedor-objetos');
+            contenedor.innerHTML = ''; // Limpiar el contenedor antes de mostrar los datos
+
+            datos.forEach(objeto => {
+                const article = document.createElement('article');
+                article.classList.add('col-12', 'col-md-6', 'tm-post');
+
+                const hr = document.createElement('hr');
+                hr.classList.add('tm-hr-primary');
+
+                const link = document.createElement('a');
+                link.classList.add('effect-lily', 'tm-post-link', 'tm-pt-60');
+
+                const divLinkInner = document.createElement('div');
+                divLinkInner.classList.add('tm-post-link-inner');
+
+                const h2 = document.createElement('h2');
+                h2.classList.add('tm-pt-30', 'tm-color-primary', 'tm-post-title');
+                h2.textContent = objeto[1]; // Nombre del objeto
+                h2.style.cursor = 'pointer'; // Cambiar el cursor a pointer para indicar que es clicable
+
+                // Asignar un evento click para mostrar el nombre, la descripción y la imagen del objeto en la ventana modal
+                h2.onclick = async function() {
+                    try {
+                        const id = objeto[0];
+                        const respuesta = await fetch(`https://chatbot.dev.dtt.tja.ucb.edu.bo/get/${id}`);
+                        
+                        if (!respuesta.ok) {
+                            throw new Error('Error en la solicitud: ' + respuesta.status);
+                        }
+
+                        const detalleObjeto = await respuesta.json();
+                        document.getElementById('modalLabel').textContent = detalleObjeto.nombre; // Título del modal con el nombre del objeto
+                        
+                        //document.getElementById('modal-descripcion').textContent = 'Descripción del objeto:\t' + detalleObjeto.descripcion;
+                        document.getElementById('modal-descripcion').textContent =  detalleObjeto.descripcion;
+
+                        // Obtener la imagen del objeto
+                        const respuestaImagen = await fetch(`https://chatbot.dev.dtt.tja.ucb.edu.bo/getpicture/${id}`);
+                        if (!respuestaImagen.ok) {
+                            throw new Error('Error en la solicitud de la imagen: ' + respuestaImagen.status);
+                        }
+                        
+                        const imagenUrl = URL.createObjectURL(await respuestaImagen.blob());
+                        document.getElementById('modal-imagen').src = imagenUrl;
+
+                        $('#myModal').modal('show'); // Mostrar la ventana modal
+                    } catch (error) {
+                        console.error('Hubo un problema con la solicitud:', error);
+                    }
+                };
+
+                const descripcion = document.createElement('p');
+                descripcion.classList.add('tm-pt-30');
+                descripcion.textContent = objeto[2];
+
+                // Ensamblar los elementos
+                link.appendChild(divLinkInner);
+                link.appendChild(h2);
+                article.appendChild(hr);
+                article.appendChild(link);
+                article.appendChild(descripcion);
+
+                // Agregar el article al contenedor
+                contenedor.appendChild(article);
+            });
+        }
+
+        // Llamada a la función al cargar la página
+        window.onload = obtenerDatos;
+    </script>
+</body>
+</html>
