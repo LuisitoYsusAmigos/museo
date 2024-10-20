@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Museo</title>
     <link rel="stylesheet" href="fontawesome/css/all.min.css"> <!-- https://fontawesome.com/ -->
-    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap" rel="stylesheet"> <!-- https://fonts.google.com/ -->
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap" rel="stylesheet">
+    <!-- https://fonts.google.com/ -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/templatemo-xtra-blog.css" rel="stylesheet">
     <!--
@@ -15,15 +17,21 @@
     <style>
         /* CSS personalizado para ajustar el tamaño del modal */
         .modal-dialog {
-            max-width: 80%; /* Ajusta el ancho del modal al 80% del ancho de la ventana */
+            max-width: 80%;
+            /* Ajusta el ancho del modal al 80% del ancho de la ventana */
         }
+
         .modal-body img {
-            max-width: 100%; /* Asegura que la imagen no sea más ancha que el modal */
-            height: auto; /* Mantiene la proporción de la imagen */
-            border-radius: 15px; /* Borde redondeado */
+            max-width: 100%;
+            /* Asegura que la imagen no sea más ancha que el modal */
+            height: auto;
+            /* Mantiene la proporción de la imagen */
+            border-radius: 15px;
+            /* Borde redondeado */
         }
     </style>
 </head>
+
 <body>
     <header class="tm-header" id="tm-header">
         <div class="tm-header-wrapper">
@@ -32,28 +40,36 @@
             </button>
             <div class="tm-site-header">
                 <div style="text-align: center;">
-                    <img src="img/museo.png" alt="" style="width: 10rem; height: 10rem;">  
+                    <img src="img/museo.png" alt="" style="width: 10rem; height: 10rem;">
                 </div>
                 <h1 class="text-center">Museo</h1>
             </div>
-            <nav class="tm-nav" id="tm-nav">            
+            <nav class="tm-nav" id="tm-nav">
                 <ul>
+
+                    <li class="tm-nav-item"><a href="chatbot.html" class="tm-nav-link">
+                            <i class="far fa-comments"></i>
+                            Chat boot
+                        </a>
+                    </li>
                     <li class="tm-nav-item active"><a href="index.html" class="tm-nav-link">
-                        <i class="fas fa-home"></i>
-                        Objetos
-                    </a></li>
+                            <i class="fas fa-home"></i>
+                            Objetos
+                        </a>
+                    </li>
+                    <!-- maps 
                     <li class="tm-nav-item"><a href="map.html" class="tm-nav-link">
                         <i class="fas fa-pen"></i>
                         Donde nos encontramos
                     </a></li>
+                    -->
                     <li class="tm-nav-item"><a href="MotoMendez.html" class="tm-nav-link">
-                        <i class="fas fa-users"></i>
-                        Quien es Moto Mendez
-                    </a></li>
-                    <li class="tm-nav-item"><a href="chatbot.html" class="tm-nav-link">
-                        <i class="far fa-comments"></i>
-                        Chat boot
-                    </a></li>
+                            <i class="fas fa-users"></i>
+                            Quien es Moto Mendez
+                        </a>
+                    </li>
+
+
                 </ul>
             </nav>
         </div>
@@ -63,8 +79,8 @@
             <!-- Search form -->
             <div class="row tm-row">
                 <div class="col-12">
-                </div>                
-            </div>            
+                </div>
+            </div>
             <div class="row tm-row" id="contenedor-objetos">
                 <!-- Los artículos generados dinámicamente aparecerán aquí -->
             </div>
@@ -89,7 +105,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    
+
                     <p id="modal-descripcion">Descripción del objeto:Diosssssssssssss </p>
                     <img id="modal-imagen" src="" alt="Imagen del objeto"> <!-- Imagen del objeto -->
                 </div>
@@ -110,7 +126,7 @@
         async function obtenerDatos() {
             try {
                 const respuesta = await fetch('https://chatbot.dev.dtt.tja.ucb.edu.bo/getall');
-                
+
                 if (!respuesta.ok) {
                     throw new Error('Error en la solicitud: ' + respuesta.status);
                 }
@@ -146,27 +162,27 @@
                 h2.style.cursor = 'pointer'; // Cambiar el cursor a pointer para indicar que es clicable
 
                 // Asignar un evento click para mostrar el nombre, la descripción y la imagen del objeto en la ventana modal
-                h2.onclick = async function() {
+                h2.onclick = async function () {
                     try {
                         const id = objeto[0];
                         const respuesta = await fetch(`https://chatbot.dev.dtt.tja.ucb.edu.bo/get/${id}`);
-                        
+
                         if (!respuesta.ok) {
                             throw new Error('Error en la solicitud: ' + respuesta.status);
                         }
 
                         const detalleObjeto = await respuesta.json();
                         document.getElementById('modalLabel').textContent = detalleObjeto.nombre; // Título del modal con el nombre del objeto
-                        
+
                         //document.getElementById('modal-descripcion').textContent = 'Descripción del objeto:\t' + detalleObjeto.descripcion;
-                        document.getElementById('modal-descripcion').textContent =  detalleObjeto.descripcion;
+                        document.getElementById('modal-descripcion').textContent = detalleObjeto.descripcion;
 
                         // Obtener la imagen del objeto
                         const respuestaImagen = await fetch(`https://chatbot.dev.dtt.tja.ucb.edu.bo/getpicture/${id}`);
                         if (!respuestaImagen.ok) {
                             throw new Error('Error en la solicitud de la imagen: ' + respuestaImagen.status);
                         }
-                        
+
                         const imagenUrl = URL.createObjectURL(await respuestaImagen.blob());
                         document.getElementById('modal-imagen').src = imagenUrl;
 
@@ -196,4 +212,5 @@
         window.onload = obtenerDatos;
     </script>
 </body>
+
 </html>
